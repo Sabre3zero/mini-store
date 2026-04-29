@@ -11,11 +11,7 @@ body {
   font-size: 40px;
 }
 
-.Textblock{
-  border-style: solid;
-  border-color: red;
-  border-width: 1px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 10px;
+.card{
+  border: solid 1px red;
+  margin: 20px 10px 20px;
 }
