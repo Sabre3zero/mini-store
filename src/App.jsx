@@ -18,7 +18,7 @@ export default function App() {
     
     if (text !== ''){
       filtered = filtered.filter(app => {
-        return app.title === text || app.tags.some(tag => tag === text)
+        return app.title.toLowerCase().includes(text.toLowerCase()) || app.tags.some(tag => tag.toLowerCase().includes(text.toLowerCase()))
       })
     }
     else {
