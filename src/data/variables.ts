@@ -1,4 +1,6 @@
-export const apps = [
+import { AppCardTypes } from "./types";
+
+export const apps: Array<AppCardTypes> = [
     {image: '/Product1.png', title: 'Product1', text: 'Some very cool description about Product1, also it is very very very very very very very long. Yeah it is definetely helpul huh? U rly still reading this? You are better doing... Oh, cutoff, see ya! man rly? why are you reading this XD Go get some sleep', tags: ['free', 'tag1']},
     {image: '/Product2.png', title: 'Product2', text: 'Text2', tags: ['free', 'tag1', 'tag2', 'tag3']},
     {image: '/Product1.png', title: 'Product3', text: 'Text3', tags: ['tag4']},
@@ -8,4 +10,6 @@ export const apps = [
     {image: '/Product1.png', title: 'Product7', text: 'Text7', tags: ['free', 'tag5']},
     {image: '/Product1.png', title: 'Product8', text: 'Text8', tags: ['tag6']},
     {image: '/Product1.png', title: 'Product9', text: 'Text9', tags: ['free', 'tag1', 'tag2', 'tag6']}
-]
+];
+
+export const unique_tags: Array<string> = [...new Set(apps.flatMap(item => item.tags))];

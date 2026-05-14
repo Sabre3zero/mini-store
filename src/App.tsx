@@ -1,7 +1,7 @@
-import './style_variables.css'
+import './data/style_variables.css'
 import styles from './App.module.css'
-import {AppCard} from './AppCard'
-import {apps} from './variables'
+import {AppCard} from './AppCard/AppCard'
+import {apps} from './data/variables'
 import {useEffect, useState} from 'react'
 
 
@@ -35,13 +35,12 @@ export default function App() {
 
   }, [text, check]);
 
-  let inputHandler = function (event) {
+  let inputHandler = function (event: React.ChangeEvent<HTMLInputElement>) {
     let text = event.currentTarget.value
     setText(text)
-
   }
 
-  let checkHandler = function (event) {
+  let checkHandler = function (event: React.ChangeEvent<HTMLInputElement>) {
     let check = event.currentTarget.checked
     setCheck(check)
   }
@@ -54,7 +53,7 @@ export default function App() {
       </header>
 
       <div>
-        <input type='text' onInput={inputHandler}/>
+        <input type='text' onChange={inputHandler}/>
         <input type='checkbox' onChange={checkHandler}/>
       </div>
 
