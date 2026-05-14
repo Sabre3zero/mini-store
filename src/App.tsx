@@ -14,6 +14,18 @@ export default function App() {
 
   let [selection, setSelection] = useState('none')
 
+  let [test, setTest] = useState([])
+
+  useEffect(() => {
+    fetch("https://rickandmortyapi.com/api/character")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      setTest(data.results)
+    })
+  }, [])
+
   useEffect(() => {
 
     let filtered = apps
@@ -58,7 +70,6 @@ export default function App() {
     setSelection(selected)
   }
 
-
   return (
     <>
       <header>
@@ -73,7 +84,7 @@ export default function App() {
           {unique_tags.map((tag: string) => 
           <option>{tag}</option>)}
         </select>
-        <p>{selection}</p>
+        <p>{test}</p>
       </div>
 
       <main>
