@@ -73,7 +73,6 @@ export default function App() {
           {unique_tags.map((tag: string) => 
           <option>{tag}</option>)}
         </select>
-        <p>{selection}</p>
       </div>
 
       <main>
