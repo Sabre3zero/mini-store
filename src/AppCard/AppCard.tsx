@@ -4,19 +4,13 @@ import {AppCardTypes} from '../data/types'
 export function AppCard({
   image,
   title,
-  text,
-  tags
+  text
 }: AppCardTypes) {
     return (
       <section className={styles.card}>
         <img src={image}/>
         <h2>{title}</h2>
         <p>{text}</p>
-        <div className={styles.tag_container}>
-          {tags.map((tag: string) => 
-          <div className={styles.tag}>{tag}</div>
-          )}
-        </div>
       </section>
     )
 }
