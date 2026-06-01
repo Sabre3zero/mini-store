@@ -1,4 +1,4 @@
-.card{
+.card {
   border: solid 1px var(--bg-secondary);
   border-radius: 10px;
   background-color: var(--bg-primary);
@@ -9,41 +9,41 @@
   flex-direction: column;
 }
 
-.card *{
+.card * {
   margin-left: 10px;
   margin-top: 10px;
 }
 
-.card img{
+.card img {
   width: 300px;
   height: 200px;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 10px 10px 0 0;
   object-fit: cover;
   object-position: center;
-  margin-left: 0px;
-  margin-top: 0px;
+  margin-left: 0;
+  margin-top: 0;
 }
 
-.card p{
+.card p {
   max-width: 300px;
   height: 90px;
   overflow-wrap: break-word;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
-  overflow: hidden;  
+  overflow: hidden;
 }
 
-.tag_container{
+.tag_container {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
 }
 
-.tag{
+.tag {
   width: fit-content;
-  padding: 5px 5px 5px 5px;
-  margin: 5px 0px 5px 0px;
+  padding: 5px;
+  margin: 5px 0;
   height: 30px;
   background-color: var(--bg-primary);
   border: solid 1px var(--bg-secondary);

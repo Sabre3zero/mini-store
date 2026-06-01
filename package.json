@@ -1,23 +1,33 @@
 {
-  "name": "mini-store",
+  "name": "ministor",
   "private": true,
   "version": "0.7.0",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "dev:deploy": "concurrently --kill-others \"npm run dev:storefront\" \"npm run dev:admin\"",
+    "dev:admin": "npm run dev -w @ministor/admin",
+    "dev:storefront": "npm run dev -w @ministor/storefront",
+    "build:api": "npm run build -w @ministor/api",
+    "lint:prettier": "prettier . --check",
+    "lint:prettier:fix": "prettier . --write",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
+    "lint:styles": "stylelint \"**/*.css\"",
+    "lint:styles:fix": "stylelint \"**/*.css\" --fix"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "globals": "^17.5.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.9"
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.1",
+    "eslint": "^10.4.1",
+    "globals": "^17.6.0",
+    "jiti": "^2.7.0",
+    "prettier": "^3.8.3",
+    "stylelint": "^17.12.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript-eslint": "^8.60.0"
   }
 }

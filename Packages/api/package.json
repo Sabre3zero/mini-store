@@ -1,0 +1,22 @@
+{
+  "name": "@ministor/api",
+  "private": true,
+  "version": "0.7.0",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:vite && npm run build:dts",
+    "build:vite": "vite build",
+    "build:dts": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.0.15"
+  }
+}
