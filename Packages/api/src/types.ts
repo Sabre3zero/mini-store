@@ -1,4 +1,4 @@
-export type Data = {
+export type DataParams = {
   id: number;
   title: string;
   description: string;
@@ -6,4 +6,9 @@ export type Data = {
   cover: {
     url: string;
   };
+};
+
+export type LoginParams = {
+  email: string;
+  password: string;
 };

@@ -8,10 +8,13 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:deploy": "concurrently --kill-others \"npm run dev:storefront\" \"npm run dev:admin\"",
+    "dev:all": "concurrently --kill-others \"npm run dev:storefront\" \"npm run dev:admin\"",
     "dev:admin": "npm run dev -w @ministor/admin",
     "dev:storefront": "npm run dev -w @ministor/storefront",
     "build:api": "npm run build -w @ministor/api",
+    "build:admin": "npm run build -w @ministor/admin",
+    "build:storefront": "npm run build -w @ministor/storefront",
+    "build:all": "npm run build:storefront && npm run build:admin",
     "lint:prettier": "prettier . --check",
     "lint:prettier:fix": "prettier . --write",
     "lint:eslint": "eslint .",
@@ -29,5 +32,8 @@
     "stylelint": "^17.12.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript-eslint": "^8.60.0"
+  },
+  "dependencies": {
+    "wouter": "^3.10.0"
   }
 }
