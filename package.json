@@ -34,6 +34,7 @@
     "typescript-eslint": "^8.60.0"
   },
   "dependencies": {
+    "mobx": "^6.16.1",
     "wouter": "^3.10.0"
   }
 }

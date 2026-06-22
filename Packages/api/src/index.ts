@@ -1,2 +1,2 @@
-export { getData, login } from "./api";
-export type { DataParams, LoginParams } from "./types";
+export { getData, login, getApps, createApp } from "./api";
+export type { DataParams, LoginParams, AppFields, CreateAppArgs } from "./types";
