@@ -62,7 +62,6 @@ export const AppList = observer(function () {
     }
   };
 
-  // Filter apps
   const filteredApps = apps.filter((app) => {
     const matchesText =
       searchText === "" ||
@@ -97,7 +96,7 @@ export const AppList = observer(function () {
         <input
           className={styles.searchInput}
           type="text"
-          placeholder="🔍 Поиск по названию..."
+          placeholder="Поиск по названию..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -115,7 +114,7 @@ export const AppList = observer(function () {
         <div className={styles.loading}>Загрузка приложений...</div>
       ) : filteredApps.length === 0 ? (
         <div className={styles.emptyState}>
-          <p>📭 Приложений не найдено</p>
+          <p>Приложений не найдено</p>
           {searchText && <p>Попробуйте изменить параметры поиска</p>}
         </div>
       ) : (
