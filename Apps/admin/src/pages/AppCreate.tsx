@@ -11,7 +11,7 @@ export const AppCreate = observer(function () {
     console.log('Token from store:', token);
     
     if (!token) {
-      throw new Error('No token found! Please login again.');
+      throw new Error('Токен не был найден. Попробуйте ещё раз.');
     }
     
     return createApp({ token, body });
