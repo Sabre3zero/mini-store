@@ -1,15 +1,18 @@
 .card {
-  border: 1px solid #333;
-  border-radius: 10px;
-  background-color: #1a1a1a;
+  border: 1px solid var(--bg-secondary, #333);
+  border-radius: 12px;
+  background-color: var(--bg-primary, #1a1a1a);
   color: white;
-  width: 300px;
+  width: 100%;
+  max-width: 320px;
   overflow: hidden;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .card img {
@@ -17,6 +20,7 @@
   height: 200px;
   object-fit: cover;
   object-position: center;
+  background-color: #2a2a2a;
 }
 
 .content {
@@ -27,6 +31,9 @@
   margin: 0 0 8px 0;
   font-size: 18px;
   color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .content p {
@@ -53,7 +60,12 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.actions button:active {
+  transform: scale(0.97);
 }
 
 .editBtn {
