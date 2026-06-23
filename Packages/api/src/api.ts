@@ -82,7 +82,7 @@ type SendRequestArgs = {
   token: string,
   url: string;
   method: 'POST' | 'PATCH' | 'DELETE' | 'GET';
-  body?: AppFields | null  // Make it optional for DELETE/GET
+  body?: AppFields | null 
 }
 
 async function sendRequest ({token, url, method, body}: SendRequestArgs) {
@@ -118,7 +118,6 @@ export async function createApp({token, body}: CreateAppArgs) {
 }
 
 export async function deleteApp({token, id}: DeleteAppArgs) {
-  // DELETE requests usually don't have a body
   const response = await fetch(new URL(`/api/me/apps/${id}`, API_BASE_URL), {
     method: 'DELETE',
     headers: {
@@ -134,4 +133,39 @@ export async function deleteApp({token, id}: DeleteAppArgs) {
   }
 
   return response.json();
+}
+
+export type UpdateAppArgs = {
+  token: string;
+  id: string | number;
+  body: AppFields;
+};
+
+export async function updateApp({ token, id, body }: UpdateAppArgs) {
+  return await sendRequest({
+    token,
+    body,
+    method: 'PATCH',
+    url: `/api/me/apps/${id}`,
+  });
+}
+
+export async function getApp({ token, id }: { token: string; id: string | number }) {
+  const url = new URL(`/api/me/apps/${id}`, API_BASE_URL);
+  
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Не удалось получить приложение");
+  }
+
+  const data = await response.json();
+  return data.item || data;
 }

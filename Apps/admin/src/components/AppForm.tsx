@@ -10,9 +10,10 @@ import styles from "./AppForm.module.css";
 type AppFormProps = {
   onSubmit: (value: CreateAppArgs) => Promise<void>;
   isEdit?: boolean;
+  initialData?: AppFields | null;
 };
 
-export const AppForm = observer(({ onSubmit, isEdit = false }: AppFormProps) => {
+export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}: AppFormProps) => {
   const { userStore } = useStore();
   const [, setLocation] = useLocation();
   const [error, setError] = useState("");
@@ -25,6 +26,18 @@ export const AppForm = observer(({ onSubmit, isEdit = false }: AppFormProps) => 
     slug: "",
     title: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        categoryId: initialData.categoryId || "",
+        description: initialData.description || "",
+        price: initialData.price || 0,
+        slug: initialData.slug || "",
+        title: initialData.title || "",
+      });
+    }
+  }, [initialData]);
 
   useEffect(() => {
     if (!userStore.categories || userStore.categories.length === 0) {

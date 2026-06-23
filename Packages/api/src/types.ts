@@ -34,12 +34,12 @@ export type LoginResponse = {
 };
 
 export type AppFields = {
-  title: string, 
-  slug: string, 
-  description: string,
-  price: number,
-  categoryId: string
-}
+  categoryId: string;
+  description: string;
+  price: number;
+  slug: string;
+  title: string;
+};
 
 export type CreateAppArgs = {
   token: string;
@@ -48,5 +48,11 @@ export type CreateAppArgs = {
 
 export type DeleteAppArgs = {
   token: string;
-  id: string;
+  id: string | number;
 }
+
+export type UpdateAppArgs = {
+  token: string;
+  id: string | number;
+  body: AppFields;
+};
