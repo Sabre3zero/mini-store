@@ -81,7 +81,7 @@ export const AppList = observer(function () {
             type="button"
             onClick={() => setLocation("/admin/create")}
           >
-            ➕ Создать
+            Создать
           </button>
           <button
             className={styles.logoutBtn}
