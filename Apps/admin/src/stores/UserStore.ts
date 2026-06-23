@@ -1,4 +1,4 @@
-import { login as apiLogin, LoginParams } from "@ministore/api";
+import { login as apiLogin, LoginParams, getCategories, CategoryParams } from "@ministore/api";
 import { makeAutoObservable, runInAction } from "mobx";
 
 const TOKEN_STORAGE_KEY = "ministorAdminToken";
@@ -10,10 +10,39 @@ type UserInfo = {
 export class UserStore {
     token = localStorage.getItem(TOKEN_STORAGE_KEY);
 
-    user: UserInfo | null = null
+    user: UserInfo | null = null;
+
+    categories: CategoryParams[] = [];
+    
+    loadError: string | null = null;
+
+    isLoading: boolean = false;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    async loadCat() {
+        if (this.isLoading) {
+            return;
+        }
+        
+        this.isLoading = true;
+        this.loadError = null;
+        
+        try {
+            const loadedCategories = await getCategories();
+        
+            runInAction(() => {
+                this.categories = loadedCategories;
+                this.isLoading = false;
+            })
+        } catch (error) {
+            runInAction(() => {
+                this.loadError = "Не удалось загрузить категории";
+                this.isLoading = false;
+            })
+        }
     }
 
     async login (params: LoginParams) {

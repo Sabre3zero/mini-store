@@ -1,3 +1,14 @@
+export type CategoryParams = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  price: number;
+};
+
 export type DataParams = {
   id: number;
   title: string;
@@ -5,6 +16,10 @@ export type DataParams = {
   price: number;
   cover: {
     url: string;
+  };
+  category: {
+    id: string
+    title: string
   };
 };
 
@@ -29,4 +44,9 @@ export type AppFields = {
 export type CreateAppArgs = {
   token: string;
   body: AppFields;
+}
+
+export type DeleteAppArgs = {
+  token: string;
+  id: string;
 }
