@@ -12,6 +12,8 @@ export const AppForm = observer(({onSubmit}: AppFormProps) => {
 
     const {userStore} = useStore()
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState<AppFields>({categoryId: '', description: '', price: 0, slug: '', title: ''});
 
     useEffect(() => {
@@ -30,33 +32,57 @@ export const AppForm = observer(({onSubmit}: AppFormProps) => {
     const handleSubmit: SubmitEventHandler = async (event) => {
         event.preventDefault();
         setError("");
+        setSuccess("");
+        setIsLoading(true);
 
         if (!userStore.token) {
-            return
+            setError("Токен не найден. Пожалуйста, войдите заново.");
+            setIsLoading(false);
+            return;
         }
 
-        await onSubmit({token: userStore.token, body: form});
-}
+        try {
+            await onSubmit({token: userStore.token, body: form});
+            setSuccess("Приложение успешно создано!");
+            setForm({categoryId: '', description: '', price: 0, slug: '', title: ''});
+        } catch (err: any) {
+            if (err.message) {
+                setError(`${err.message}`);
+            } else {
+                setError("Произошла неизвестная ошибка. Попробуйте ещё раз.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
-    return <form onSubmit={handleSubmit}>
-        <div>Название: <input type="text" name="title" onChange={handleChange} /></div>
-        <div>Slug: <input type="text" name="slug" onChange={handleChange} /></div>
-        <div>Описание: <textarea name="description" onChange={handleChange} /></div>
-        <div>Категория:{" "}
-            <select
-                name="categoryId"
-                value={form.categoryId}
-                onChange={handleChange}
-            >
-                {userStore.categories.map(({ id, title }: CategoryParams) => 
-                    <option value={id} key={id}>
-                        {title}
-                    </option>
-                )}
-            </select>
-        </div>
-        <div>Цена: <input type="text" name="price" onChange={handleChange} /></div>
-        <button type="submit">Отправить</button>
-        {error}
-    </form>
+    return (
+        <form onSubmit={handleSubmit}>
+            <div>Название: <input type="text" name="title" onChange={handleChange} value={form.title} /></div>
+            <div>Slug: <input type="text" name="slug" onChange={handleChange} value={form.slug} /></div>
+            <div>Описание: <textarea name="description" onChange={handleChange} value={form.description} /></div>
+            <div>Категория:{" "}
+                <select
+                    name="categoryId"
+                    value={form.categoryId}
+                    onChange={handleChange}
+                >
+                    <option value="">Выберите категорию</option>
+                    {userStore.categories.map(({ id, title }: CategoryParams) => 
+                        <option value={id} key={id}>
+                            {title}
+                        </option>
+                    )}
+                </select>
+            </div>
+            <div>Цена: <input type="text" name="price" onChange={handleChange} value={form.price} /></div>
+            
+            <button type="submit" disabled={isLoading}>
+                {isLoading ? "Создание..." : "Отправить"}
+            </button>
+            
+            {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+            {success && <div style={{ color: 'green', marginTop: '10px' }}>{success}</div>}
+        </form>
+    )
 })

@@ -1,9 +1,9 @@
-import { Redirect, useLocation, Link } from "wouter";
+import { Redirect, useLocation } from "wouter";
 import { useEffect, useState } from "react";
-import { getApps } from "@ministore/api";
+import { getApps, deleteApp } from "@ministore/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../stores/useStore";
-import { AppCard } from "@ministor/storefront/src/AppCard/AppCard";
+import { AdminAppCard } from "../AdminAppCard/AdminAppCard";
 import { AppsTypes } from "@ministor/storefront/src/data/types";
 
 export const AppList = observer(function () {
@@ -39,6 +39,26 @@ export const AppList = observer(function () {
     setLocation('/');
   }
 
+  const handleEdit = (id: string) => {
+    setLocation(`/admin/edit/${id}`);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!userStore.token) return;
+    
+    if (!window.confirm("Вы уверены, что хотите удалить это приложение?")) {
+      return;
+    }
+
+    try {
+      await deleteApp({ token: userStore.token, id });
+      await loadApps();
+    } catch (error) {
+      console.error("Failed to delete app:", error);
+      alert("Не удалось удалить приложение");
+    }
+  };
+
   return (
     <main>
       <h1>Список приложений</h1>
@@ -57,21 +77,15 @@ export const AppList = observer(function () {
       ) : (
         <div className="apps-grid">
           {apps.map(({ id, cover, title, description }) => (
-            <div key={id} className="app-item">
-              <AppCard
-                image={cover?.url ? "https://ministor.ru" + cover.url : "/fallback-image.jpg"}
-                title={title}
-                text={description}
-              />
-              <div className="app-actions">
-                <Link href={`/admin/edit/${id}`}>
-                  <button className="edit-btn">Редактировать</button>
-                </Link>
-                <Link href={`/admin/delete/${id}`}>
-                  <button className="delete-btn">Удалить</button>
-                </Link>
-              </div>
-            </div>
+            <AdminAppCard
+              key={id}
+              id={id}
+              image={cover?.url ? "https://ministor.ru" + cover.url : "/fallback-image.jpg"}
+              title={title}
+              description={description}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       )}

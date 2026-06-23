@@ -95,15 +95,17 @@ async function sendRequest ({token, url, method, body}: SendRequestArgs) {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
-    body: stringifiedBody  // undefined for DELETE/GET
+    body: stringifiedBody
   });
 
+  const data = await response.json().catch(() => ({}));
+
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `Ошибка: ${response.status}`);
+    const errorMessage = data?.error?.message || data?.message || `Ошибка ${response.status}`;
+    throw new Error(errorMessage);
   }
 
-  return response.json();
+  return data;
 }
 
 export async function createApp({token, body}: CreateAppArgs) {
