@@ -18,8 +18,8 @@ export type DataParams = {
     url: string;
   };
   category: {
-    id: string
-    title: string
+    id: string;
+    title: string;
   };
 };
 
@@ -33,14 +33,13 @@ export type LoginResponse = {
   email: string;
 };
 
-
 export type AppFields = {
   categoryId: string;
   description: string;
   price: number;
   slug: string;
   title: string;
-  cover?: Cover | null; 
+  cover?: Cover | null;
   screenshots?: Screenshot[];
   platforms?: string[];
   releaseDate?: string | null;
@@ -50,12 +49,12 @@ export type AppFields = {
 export type CreateAppArgs = {
   token: string;
   body: AppFields;
-}
+};
 
 export type DeleteAppArgs = {
   token: string;
   id: string | number;
-}
+};
 
 export type UpdateAppArgs = {
   token: string;

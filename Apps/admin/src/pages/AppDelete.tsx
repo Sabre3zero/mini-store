@@ -22,14 +22,18 @@ export const AppDelete = observer(function () {
 
   const handleDelete = async () => {
     if (!appId) return;
-    
+
     const token = userStore.token;
     if (!token) {
       setError("Токен не был найден. Попробуйте ещё раз.");
       return;
     }
 
-    if (!window.confirm("Вы уверены, что хотите удалить это приложение? Это действие нельзя отменить.")) {
+    if (
+      !window.confirm(
+        "Вы уверены, что хотите удалить это приложение? Это действие нельзя отменить.",
+      )
+    ) {
       return;
     }
 
@@ -39,7 +43,7 @@ export const AppDelete = observer(function () {
     try {
       await deleteApp({ token, id: appId });
       setSuccess(true);
-      
+
       setTimeout(() => {
         setLocation("/admin");
       }, 2000);
@@ -57,23 +61,27 @@ export const AppDelete = observer(function () {
   return (
     <div className="delete-container">
       <h2>Удаление приложения</h2>
-      
+
       {error && <div className="error">{error}</div>}
-      {success && <div className="success">Приложение успешно удалено! Перенаправление...</div>}
-      
+      {success && (
+        <div className="success">
+          Приложение успешно удалено! Перенаправление...
+        </div>
+      )}
+
       {!success && !error && (
         <>
           <p>Вы действительно хотите удалить приложение #{appId}?</p>
           <div className="actions">
-            <button 
-              onClick={handleDelete} 
+            <button
+              onClick={handleDelete}
               disabled={loading}
               className="delete-btn"
             >
               {loading ? "Удаление..." : "Удалить"}
             </button>
-            <button 
-              onClick={handleCancel} 
+            <button
+              onClick={handleCancel}
               disabled={loading}
               className="cancel-btn"
             >

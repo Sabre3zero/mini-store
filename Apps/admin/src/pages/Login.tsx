@@ -36,9 +36,15 @@ export const Login = observer(function () {
       await userStore.login(form);
       setLocation("/admin");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Не удалось войти. Попробуйте ещё раз";
-      
-      if (message.toLowerCase().includes("email") || message.toLowerCase().includes("password")) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Не удалось войти. Попробуйте ещё раз";
+
+      if (
+        message.toLowerCase().includes("email") ||
+        message.toLowerCase().includes("password")
+      ) {
         setError("Неверный email или пароль");
       } else if (message.toLowerCase().includes("network")) {
         setError("Ошибка сети. Проверьте подключение");
@@ -54,7 +60,9 @@ export const Login = observer(function () {
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
         <div className={styles.logo}>
-          <h1>Mini<span>Store</span></h1>
+          <h1>
+            Mini<span>Store</span>
+          </h1>
           <p>Административная панель</p>
         </div>
 
@@ -92,8 +100,8 @@ export const Login = observer(function () {
 
           {error && <div className={styles.errorMessage}>{error}</div>}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={styles.submitBtn}
             disabled={isLoading}
           >

@@ -14,7 +14,7 @@
     "build:api": "npm run build -w @ministor/api",
     "build:admin": "npm run build -w @ministor/admin",
     "build:storefront": "npm run build -w @ministor/storefront",
-    "build:all": "npm run build:storefront && npm run build:admin",
+    "build:all": "npm run build:api && npm run build:storefront && npm run build:admin",
     "lint:prettier": "prettier . --check",
     "lint:prettier:fix": "prettier . --write",
     "lint:eslint": "eslint .",

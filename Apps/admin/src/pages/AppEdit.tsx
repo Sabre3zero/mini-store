@@ -32,9 +32,9 @@ export const AppEdit = observer(function () {
 
       try {
         const appData = await getApp({ token: userStore.token, id: appId });
-        
+
         const app = appData.item || appData;
-        
+
         setInitialData({
           categoryId: app.categoryId || app.category?.id || "",
           description: app.description || "",
@@ -44,7 +44,11 @@ export const AppEdit = observer(function () {
           cover: app.cover || null,
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Не удалось загрузить приложение");
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Не удалось загрузить приложение",
+        );
       } finally {
         setLoading(false);
       }
@@ -67,14 +71,16 @@ export const AppEdit = observer(function () {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        color: 'white',
-        fontSize: '18px'
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          color: "white",
+          fontSize: "18px",
+        }}
+      >
         Загрузка...
       </div>
     );
@@ -82,33 +88,37 @@ export const AppEdit = observer(function () {
 
   if (error) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        color: 'white',
-        padding: '20px'
-      }}>
-        <div style={{ 
-          color: '#f44336', 
-          fontSize: '18px',
-          marginBottom: '20px',
-          textAlign: 'center'
-        }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          color: "white",
+          padding: "20px",
+        }}
+      >
+        <div
+          style={{
+            color: "#f44336",
+            fontSize: "18px",
+            marginBottom: "20px",
+            textAlign: "center",
+          }}
+        >
           {error}
         </div>
         <button
-          onClick={() => setLocation('/admin')}
+          onClick={() => setLocation("/admin")}
           style={{
-            padding: '10px 24px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '14px'
+            padding: "10px 24px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontSize: "14px",
           }}
         >
           ← Вернуться к списку
@@ -119,26 +129,28 @@ export const AppEdit = observer(function () {
 
   if (!initialData) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        color: 'white',
-        padding: '20px'
-      }}>
-        <div style={{ marginBottom: '20px' }}>Приложение не найдено</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          color: "white",
+          padding: "20px",
+        }}
+      >
+        <div style={{ marginBottom: "20px" }}>Приложение не найдено</div>
         <button
-          onClick={() => setLocation('/admin')}
+          onClick={() => setLocation("/admin")}
           style={{
-            padding: '10px 24px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '14px'
+            padding: "10px 24px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontSize: "14px",
           }}
         >
           ← Вернуться к списку
@@ -148,8 +160,8 @@ export const AppEdit = observer(function () {
   }
 
   return (
-    <AppForm 
-      onSubmit={handleUpdateApp} 
+    <AppForm
+      onSubmit={handleUpdateApp}
       isEdit={true}
       initialData={initialData}
     />

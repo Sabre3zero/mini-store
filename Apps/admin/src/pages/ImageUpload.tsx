@@ -9,12 +9,12 @@ type ImageUploadProps = {
   maxSize?: number;
 };
 
-export function ImageUpload({ 
-  onImageSelect, 
-  currentImage, 
+export function ImageUpload({
+  onImageSelect,
+  currentImage,
   label = "Загрузить изображение",
   accept = "image/*",
-  maxSize = 5
+  maxSize = 5,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentImage || null);
   const [error, setError] = useState("");
@@ -22,11 +22,11 @@ export function ImageUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-  if (currentImage) {
-    console.log('Setting preview from currentImage:', currentImage);
-    setPreview(currentImage);
-  }
-}, [currentImage]);
+    if (currentImage) {
+      console.log("Setting preview from currentImage:", currentImage);
+      setPreview(currentImage);
+    }
+  }, [currentImage]);
 
   const handleFileSelect = (file: File | null) => {
     if (!file) {
@@ -40,19 +40,19 @@ export function ImageUpload({
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
-      setError('Пожалуйста, выберите изображение');
+    if (!file.type.startsWith("image/")) {
+      setError("Пожалуйста, выберите изображение");
       return;
     }
 
     setError("");
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
-    
+
     onImageSelect(file);
   };
 
@@ -64,7 +64,7 @@ export function ImageUpload({
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragging(false);
-    
+
     const file = event.dataTransfer.files?.[0] || null;
     handleFileSelect(file);
   };
@@ -105,7 +105,7 @@ export function ImageUpload({
           className={styles.hiddenInput}
           aria-label={label}
         />
-        
+
         {preview ? (
           <div className={styles.previewContainer}>
             <img src={preview} alt="Preview" className={styles.preview} />
@@ -117,22 +117,24 @@ export function ImageUpload({
           <div className={styles.placeholder}>
             <div className={styles.icon}>🖼️</div>
             <p className={styles.label}>{label}</p>
-            <p className={styles.subLabel}>Нажмите или перетащите изображение</p>
+            <p className={styles.subLabel}>
+              Нажмите или перетащите изображение
+            </p>
             <p className={styles.sizeLimit}>Максимум {maxSize}MB</p>
           </div>
         )}
       </div>
-      
+
       {preview && (
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={handleRemove}
           className={styles.removeBtn}
         >
           Удалить
         </button>
       )}
-      
+
       {error && <div className={styles.error}>{error}</div>}
     </div>
   );

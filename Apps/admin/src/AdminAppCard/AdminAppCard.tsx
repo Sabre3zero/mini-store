@@ -34,13 +34,15 @@ export function AdminAppCard({
         <h2>{title || "Без названия"}</h2>
         <p>{description || "Нет описания"}</p>
         {price !== undefined && (
-          <div style={{ 
-            color: price === 0 ? '#4CAF50' : '#FFD700', 
-            fontSize: '14px',
-            fontWeight: 'bold',
-            marginBottom: '12px'
-          }}>
-            {price === 0 ? 'Бесплатно' : `${price} ₽`}
+          <div
+            style={{
+              color: price === 0 ? "#4CAF50" : "#FFD700",
+              fontSize: "14px",
+              fontWeight: "bold",
+              marginBottom: "12px",
+            }}
+          >
+            {price === 0 ? "Бесплатно" : `${price} ₽`}
           </div>
         )}
         <div className={styles.actions}>

@@ -6,7 +6,9 @@
   width: 100%;
   max-width: 320px;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
 }
 
@@ -61,7 +63,9 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .actions button:active {
@@ -69,7 +73,7 @@
 }
 
 .editBtn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
