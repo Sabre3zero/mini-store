@@ -47,9 +47,8 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
         ? `https://ministor.ru${coverPath}`
         : coverPath;
       setCoverUrl(fullCoverUrl);
-      console.log('🖼️ Setting cover preview URL:', fullCoverUrl);
+      console.log('Setting cover preview URL:', fullCoverUrl);
       
-      // Also store dimensions if available
       if (initialData.cover.width && initialData.cover.height) {
         setImageDimensions({
           width: initialData.cover.width,
@@ -158,7 +157,10 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             size: coverFile.size || null
           };
           
-          setCoverUrl(imagePath);
+          const fullImageUrl = imagePath.startsWith('/') 
+            ? `https://ministor.ru${imagePath}`
+            : imagePath;
+          setCoverUrl(fullImageUrl);
           console.log('Image uploaded:', imagePath);
           console.log('Cover data:', coverData);
         } catch (uploadErr) {
@@ -206,9 +208,6 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
         setImageDimensions(null);
       }
 
-      setTimeout(() => {
-        setLocation("/admin");
-      }, 2000);
     } catch (err: any) {
       const message = err.message || "Произошла неизвестная ошибка";
       console.error('Error:', message);
