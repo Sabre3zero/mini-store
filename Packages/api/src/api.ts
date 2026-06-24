@@ -227,7 +227,6 @@ export async function uploadImage({
 
   if (data.success && data.items && data.items.length > 0) {
     const imageUrl = data.items[0].url;
-    // Return the full URL or the path
     return imageUrl;
   }
 
