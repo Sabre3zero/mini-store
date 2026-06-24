@@ -1,4 +1,3 @@
-// components/ImageUpload.tsx
 import { useState, useRef, ChangeEvent, useEffect } from "react";
 import styles from "./ImageUpload.module.css";
 

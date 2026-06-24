@@ -38,7 +38,6 @@ export const Login = observer(function () {
     } catch (err) {
       const message = err instanceof Error ? err.message : "Не удалось войти. Попробуйте ещё раз";
       
-      // Custom error messages
       if (message.toLowerCase().includes("email") || message.toLowerCase().includes("password")) {
         setError("Неверный email или пароль");
       } else if (message.toLowerCase().includes("network")) {

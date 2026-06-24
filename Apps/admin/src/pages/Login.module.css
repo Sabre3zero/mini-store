@@ -155,7 +155,6 @@
   }
 }
 
-/* Responsive */
 @media (width <= 480px) {
   .loginCard {
     padding: 24px;
