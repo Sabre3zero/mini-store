@@ -33,12 +33,18 @@ export type LoginResponse = {
   email: string;
 };
 
+
 export type AppFields = {
   categoryId: string;
   description: string;
   price: number;
   slug: string;
   title: string;
+  cover?: Cover | null; 
+  screenshots?: Screenshot[];
+  platforms?: string[];
+  releaseDate?: string | null;
+  ownerId?: string | null;
 };
 
 export type CreateAppArgs = {
@@ -55,4 +61,23 @@ export type UpdateAppArgs = {
   token: string;
   id: string | number;
   body: AppFields;
+};
+
+export type Cover = {
+  url: string;
+  storageKey?: string | null;
+  alt?: string;
+  width?: number | null;
+  height?: number | null;
+  mimeType?: string | null;
+  size?: number | null;
+};
+
+export type Screenshot = {
+  url: string;
+  storageKey?: string | null;
+  width?: number | null;
+  height?: number | null;
+  mimeType?: string | null;
+  size?: number | null;
 };

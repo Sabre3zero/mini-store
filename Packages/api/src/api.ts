@@ -169,3 +169,44 @@ export async function getApp({ token, id }: { token: string; id: string | number
   const data = await response.json();
   return data.item || data;
 }
+
+export async function uploadImage({ 
+  token, 
+  file, 
+  kind = 'cover', 
+  slug = '' 
+}: { 
+  token: string; 
+  file: File; 
+  kind?: 'cover' | 'screenshot'; 
+  slug?: string;
+}) {
+  const formData = new FormData();
+  formData.append('kind', kind);
+  formData.append('files', file);
+  formData.append('slug', slug);
+  formData.append('assetFolder', 'apps');
+
+  const response = await fetch(new URL('/api/admin/uploads/images', API_BASE_URL), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Не удалось загрузить изображение');
+  }
+
+  const data = await response.json();
+  
+  if (data.success && data.items && data.items.length > 0) {
+    const imageUrl = data.items[0].url;
+    // Return the full URL or the path
+    return imageUrl; 
+  }
+  
+  throw new Error('Не удалось получить URL загруженного изображения');
+}

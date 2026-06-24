@@ -13,7 +13,6 @@ export const AppEdit = observer(function () {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [initialData, setInitialData] = useState<AppFields | null>(null);
-  const [appTitle, setAppTitle] = useState("");
 
   const appId = params.id;
 
@@ -42,8 +41,8 @@ export const AppEdit = observer(function () {
           price: app.price || 0,
           slug: app.slug || "",
           title: app.title || "",
+          cover: app.cover || null,
         });
-        setAppTitle(app.title || "");
       } catch (err) {
         setError(err instanceof Error ? err.message : "Не удалось загрузить приложение");
       } finally {

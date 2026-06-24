@@ -1,10 +1,10 @@
-// components/AppForm.tsx
 import { ChangeEvent, SubmitEventHandler, useEffect, useState } from "react";
-import { CreateAppArgs } from "@ministore/api";
+import { CreateAppArgs, uploadImage } from "@ministore/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../stores/useStore";
-import { AppFields, CategoryParams } from "@ministore/api";
+import { AppFields, CategoryParams, Cover } from "@ministore/api";
 import { useLocation } from "wouter";
+import { ImageUpload } from "../pages/ImageUpload";
 import styles from "./AppForm.module.css";
 
 type AppFormProps = {
@@ -19,6 +19,10 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
   const [form, setForm] = useState<AppFields>({
     categoryId: "",
     description: "",
@@ -28,16 +32,33 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
   });
 
   useEffect(() => {
-    if (initialData) {
-      setForm({
-        categoryId: initialData.categoryId || "",
-        description: initialData.description || "",
-        price: initialData.price || 0,
-        slug: initialData.slug || "",
-        title: initialData.title || "",
-      });
+  if (initialData) {
+    setForm({
+      categoryId: initialData.categoryId || "",
+      description: initialData.description || "",
+      price: initialData.price || 0,
+      slug: initialData.slug || "",
+      title: initialData.title || "",
+    });
+    
+    if (initialData.cover?.url) {
+      const coverPath = initialData.cover.url;
+      const fullCoverUrl = coverPath.startsWith('/') 
+        ? `https://ministor.ru${coverPath}`
+        : coverPath;
+      setCoverUrl(fullCoverUrl);
+      console.log('🖼️ Setting cover preview URL:', fullCoverUrl);
+      
+      // Also store dimensions if available
+      if (initialData.cover.width && initialData.cover.height) {
+        setImageDimensions({
+          width: initialData.cover.width,
+          height: initialData.cover.height
+        });
+      }
     }
-  }, [initialData]);
+  }
+}, [initialData]);
 
   useEffect(() => {
     if (!userStore.categories || userStore.categories.length === 0) {
@@ -59,6 +80,30 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
       [event.target.name]: value,
     });
   }
+
+  const handleImageSelect = (file: File | null) => {
+    setCoverFile(file);
+    setImageDimensions(null);
+    
+    if (!file) {
+      setCoverUrl(null);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        setImageDimensions({
+          width: img.width,
+          height: img.height
+        });
+        console.log('Image dimensions:', img.width, 'x', img.height);
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit: SubmitEventHandler = async (event) => {
     event.preventDefault();
@@ -91,7 +136,57 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
     }
 
     try {
-      await onSubmit({ token: userStore.token, body: form });
+      let coverData: Cover | null = null;
+      
+      if (coverFile) {
+        setUploadingImage(true);
+        try {
+          const imagePath = await uploadImage({
+            token: userStore.token,
+            file: coverFile,
+            kind: 'cover',
+            slug: form.slug,
+          });
+          
+          coverData = {
+            url: imagePath,
+            storageKey: null,
+            alt: form.title || '',
+            width: imageDimensions?.width || 1,
+            height: imageDimensions?.height || 1,
+            mimeType: coverFile.type || null,
+            size: coverFile.size || null
+          };
+          
+          setCoverUrl(imagePath);
+          console.log('Image uploaded:', imagePath);
+          console.log('Cover data:', coverData);
+        } catch (uploadErr) {
+          throw new Error(`Не удалось загрузить изображение: ${uploadErr instanceof Error ? uploadErr.message : ''}`);
+        } finally {
+          setUploadingImage(false);
+        }
+      } else if (coverUrl && !coverFile) {
+        coverData = {
+          url: coverUrl,
+          storageKey: null,
+          alt: form.title || '',
+          width: imageDimensions?.width || 1,
+          height: imageDimensions?.height || 1,
+          mimeType: null,
+          size: null
+        };
+      }
+
+      const submitData = {
+        ...form,
+        cover: coverData,
+      };
+
+      console.log('Submitting app data:', submitData);
+
+      await onSubmit({ token: userStore.token, body: submitData });
+      
       setSuccess(
         isEdit 
           ? "Приложение успешно обновлено!" 
@@ -106,6 +201,9 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
           slug: "",
           title: "",
         });
+        setCoverFile(null);
+        setCoverUrl(null);
+        setImageDimensions(null);
       }
 
       setTimeout(() => {
@@ -113,6 +211,7 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
       }, 2000);
     } catch (err: any) {
       const message = err.message || "Произошла неизвестная ошибка";
+      console.error('Error:', message);
 
       if (message.includes("categoryId обязателен")) {
         setError("Пожалуйста, выберите категорию");
@@ -130,11 +229,14 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
         setError("У вас недостаточно прав для создания приложения");
       } else if (message.includes("slug")) {
         setError(`${message}`);
+      } else if (message.includes("width") || message.includes("height")) {
+        setError("Не удалось определить размеры изображения. Попробуйте другое изображение.");
       } else {
         setError(`${message}`);
       }
     } finally {
       setIsLoading(false);
+      setUploadingImage(false);
     }
   };
 
@@ -167,7 +269,7 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             value={form.title}
             onChange={handleChange}
             placeholder="Введите название приложения"
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           />
         </div>
 
@@ -182,7 +284,7 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             value={form.slug}
             onChange={handleChange}
             placeholder="например: my-awesome-app"
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           />
           <small style={{ color: "#666", fontSize: "12px", marginTop: "4px" }}>
             Используется в URL: https://ministor.ru/apps/{form.slug || "..."}
@@ -197,7 +299,7 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             value={form.description}
             onChange={handleChange}
             placeholder="Введите описание приложения"
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           />
         </div>
 
@@ -210,7 +312,7 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             name="categoryId"
             value={form.categoryId}
             onChange={handleChange}
-            disabled={isLoading || !userStore.categories.length}
+            disabled={isLoading || uploadingImage || !userStore.categories.length}
           >
             <option value="">Выберите категорию</option>
             {userStore.categories.map(({ id, title }: CategoryParams) => (
@@ -232,11 +334,31 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
             placeholder="0"
             min="0"
             step="1"
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           />
           <small style={{ color: "#666", fontSize: "12px", marginTop: "4px" }}>
             Введите 0 для бесплатного приложения
           </small>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Обложка</label>
+          <ImageUpload
+            onImageSelect={handleImageSelect}
+            currentImage={coverUrl}
+            label="Загрузить обложку"
+            maxSize={5}
+          />
+          {uploadingImage && (
+            <div style={{ color: '#aaa', fontSize: '13px', marginTop: '4px' }}>
+              Загрузка изображения...
+            </div>
+          )}
+          {imageDimensions && !uploadingImage && (
+            <div style={{ color: '#666', fontSize: '12px', marginTop: '4px' }}>
+              Размеры: {imageDimensions.width} x {imageDimensions.height}px
+            </div>
+          )}
         </div>
 
         {error && <div className={styles.errorMessage}>{error}</div>}
@@ -246,18 +368,20 @@ export const AppForm = observer(({ onSubmit, isEdit = false, initialData = null}
           <button
             type="submit"
             className={styles.submitBtn}
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           >
-            {isLoading 
-              ? isEdit ? "Сохраняем..." : "Создаем..." 
-              : isEdit ? "Сохранить" : "Создать"
+            {uploadingImage 
+              ? "Загрузка..." 
+              : isLoading 
+                ? isEdit ? "Сохраняем..." : "Создаем..." 
+                : isEdit ? "Сохранить" : "Создать"
             }
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className={styles.cancelBtn}
-            disabled={isLoading}
+            disabled={isLoading || uploadingImage}
           >
             Отмена
           </button>
