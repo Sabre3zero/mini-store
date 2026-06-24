@@ -5,7 +5,7 @@
   background-color: var(--bg-secondary, #1a1a1a);
   border-radius: 12px;
   border: 1px solid var(--bg-secondary, #333);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 20px rgb(0 0 0 / 40%);
 }
 
 .header {
@@ -76,7 +76,7 @@
 .formGroup select:focus {
   outline: none;
   border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  box-shadow: 0 0 0 3px rgb(76 175 80 / 10%);
 }
 
 .formGroup input::placeholder,
@@ -110,12 +110,12 @@
 }
 
 .formGroup input[type="number"] {
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .formGroup input[type="number"]::-webkit-outer-spin-button,
 .formGroup input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
@@ -180,14 +180,14 @@
 
 .successMessage {
   composes: message;
-  background-color: rgba(76, 175, 80, 0.15);
+  background-color: rgb(76 175 80 / 15%);
   border: 1px solid #4CAF50;
   color: #4CAF50;
 }
 
 .errorMessage {
   composes: message;
-  background-color: rgba(244, 67, 54, 0.15);
+  background-color: rgb(244 67 54 / 15%);
   border: 1px solid #f44336;
   color: #f44336;
 }
@@ -198,7 +198,7 @@
   margin-left: 4px;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .formContainer {
     margin: 20px;
     padding: 20px;

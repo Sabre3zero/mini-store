@@ -7,12 +7,12 @@
   max-width: 320px;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
 }
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 50%);
 }
 
 .card img {
@@ -28,7 +28,7 @@
 }
 
 .content h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: 18px;
   color: white;
   overflow: hidden;
@@ -37,7 +37,7 @@
 }
 
 .content p {
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
   font-size: 14px;
   color: #aaa;
   display: -webkit-box;
